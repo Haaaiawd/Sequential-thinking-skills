@@ -60,6 +60,9 @@ license: MIT
 在使用前，应先确保本地已安装对应 CLI：
 
 ```bash
+npm install -g sequential-thinking-cli
+
+# 或
 pnpm add -g sequential-thinking-cli
 ```
 
