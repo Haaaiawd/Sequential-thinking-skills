@@ -1,176 +1,180 @@
 <h1 align="center">sequential-thinking</h1>
 
 <p align="center">
-  让 AI 在复杂问题里持续推进、允许修正，并最终收敛成结论。<br>
+  Let AI keep advancing through complex problems, revise when needed, and converge to a conclusion.<br>
   A reusable skill for controlled multi-step reasoning, revision, comparison, and convergence.
+</p>
+
+<p align="center">
+  <a href="README.zh-CN.md">中文文档</a>
 </p>
 
 ---
 
-## 一个 skill，一个运行时
+## One Skill, One Runtime
 
-| 组件 | 干什么 | 什么时候用 |
-|------|--------|-----------|
-| **sequential-thinking** | 定义什么时候该进入顺序思考、如何推进、何时修正、如何收敛 | 复杂问题需要多步分析、设计规划、问题分解、候选方案比较时 |
-| **sequential-thinking-cli** | 提供 `start / step / replay` 执行协议、自动落盘、回放和导出能力 | 需要把 sequential-thinking 变成一个可执行、可复核、可导出的运行时过程时 |
+| Component | What It Does | When to Use |
+|-----------|--------------|-------------|
+| **sequential-thinking** | Defines when to enter sequential reasoning, how to advance, when to revise, and how to converge | When a problem requires multi-step analysis, planning, decomposition, or comparison between candidate paths |
+| **sequential-thinking-cli** | Provides the `start / step / replay` execution contract, automatic persistence, replay generation, and export | When you want sequential-thinking to run as an executable, reviewable, replayable runtime process |
 
-这个仓库的重点是 **skill 本身**。CLI 不是主角，它只是让这个 skill 真正落地的执行层。
+This repository is primarily about the **skill itself**. The CLI is not the main artifact; it is the execution layer that makes the skill operational.
 
 ---
 
 ## sequential-thinking
 
-`sequential-thinking` 不是“多写几段 thought”的技巧，而是一种面向复杂问题的受控推理方式：**持续推进、允许修正、保留边界，并最终收敛成结论**。
+`sequential-thinking` is not a trick for writing more thoughts. It is a controlled reasoning pattern for complex work: **advance continuously, revise when needed, preserve boundaries, and converge to a conclusion**.
 
-它解决的不是“不会想”，而是：
+It does not solve “the model cannot think.” It solves these more common failures:
 
-- 想得太散
-- 过早下结论
-- 中途出现新证据却不修正
-- 候选路径很多但比较失控
-- 最终没有留下可复核的推理轨迹
+- reasoning that drifts
+- conclusions reached too early
+- no revision when new evidence appears
+- uncontrolled comparison between too many paths
+- no replayable reasoning trail at the end
 
-这个 skill 的目标，是把复杂问题处理成一个**有边界、可修正、可复核的推理过程**，而不是让模型一开始就假装自己已经知道答案。
-
----
-
-## 为什么它不是普通提示词
-
-- **它要求推进**：不是一次性输出整包结论，而是逐步逼近问题核心
-- **它允许修正**：前面判断错了，可以明确回头修，不需要硬撑旧前提
-- **它支持分支比较**：存在多个候选路径时，先比较再收敛
-- **它要求收敛**：不能把“我还能继续想”当作默认出口
-- **它保留轨迹**：推理过程应可回放、可导出、可复核
+The goal of this skill is to turn complex problem solving into a **bounded, revisable, reviewable reasoning process**, instead of letting the model pretend it already knows the answer from the start.
 
 ---
 
-## 什么时候用
+## Why This Is Not Just Another Prompt
 
-- 问题需要多个相互关联的推理步骤
-- 初始范围或方法不明确，需要先拆问题、再形成方法
-- 需要在有限候选方案之间做比较，而不是无限发散
-- 需要回看已有判断、识别漏洞、证据不足与隐含假设
-- 需要留下可回放、可导出的推理轨迹
-
-**不适用场景：**
-
-- 简单事实查询
-- 单步即可完成的任务
-- 路径已经非常明确、无需多步推演的问题
-- 纯头脑风暴且暂时不要求收敛的场景
+- **It enforces progression**: you do not dump a full conclusion immediately; you move toward the core problem step by step
+- **It allows revision**: if an earlier judgment was wrong, you explicitly correct it instead of carrying a broken premise forward
+- **It supports branch comparison**: when multiple paths exist, compare first and converge later
+- **It requires convergence**: “I could keep thinking” is not a valid default ending
+- **It preserves a trail**: the reasoning process should be replayable, exportable, and reviewable
 
 ---
 
-## 它如何工作
+## When to Use It
 
-- **先找主问题，再找答案**
-- **允许修正，而不是硬撑前提**
-- **先消除复杂度，再堆解决方案**
-- **每一步只推进一步**
-- **最终必须落到结论**
+- The problem needs multiple connected reasoning steps
+- The scope or method is unclear and must be decomposed first
+- A limited set of candidate paths must be compared instead of allowing open-ended divergence
+- An earlier judgment must be reviewed for gaps, weak evidence, or hidden assumptions
+- A replayable, exportable reasoning trail is required
 
-它的核心能力包括：
+**Not a good fit for:**
 
-- **迭代推进**：把复杂问题拆成连续步骤，而不是试图一口气得到完整答案
-- **动态修正**：当新证据出现时，允许回看并修正前面的判断
-- **分支比较**：当存在替代路径时，允许先比较再收敛
-- **上下文保持**：在多步推理中维持清晰的问题边界与目标
-- **结论收束**：最终必须形成判断，而不是无限发散
+- simple factual lookups
+- tasks that can be completed in a single step
+- problems whose path is already obvious
+- pure brainstorming sessions that do not need convergence yet
 
 ---
 
-## 安装
+## How It Works
+
+- **Find the real problem before chasing the answer**
+- **Revise instead of defending a broken premise**
+- **Reduce complexity before piling on solutions**
+- **Advance one step at a time**
+- **End with a conclusion**
+
+Its core capabilities include:
+
+- **Iterative progression**: break complex work into consecutive steps instead of forcing a full answer in one pass
+- **Dynamic revision**: when new evidence appears, revisit and correct earlier judgment
+- **Branch comparison**: compare alternatives before converging
+- **Context retention**: preserve clear problem boundaries and goals across multiple steps
+- **Conclusion discipline**: force a real judgment instead of endless divergence
+
+---
+
+## Install
 
 ```bash
 npx skills add haaaiawd/sequential-thinking-skills
 ```
 
-适配所有支持 `SKILL.md` 协议的 AI 客户端。
+Works with AI clients that support the `SKILL.md` protocol.
 
 ---
 
-## 如何使用这个 skill
+## How To Use This Skill
 
-当问题符合以下特征时，让 AI 进入 `sequential-thinking`：
+Enter `sequential-thinking` when the problem has these traits:
 
-- 需要多步推进
-- 需要中途修正
-- 需要比较候选路径
-- 需要最终收敛成结论
+- it needs multi-step advancement
+- it may require correction in the middle
+- it requires comparing candidate paths
+- it must eventually converge to a conclusion
 
-推荐工作流：
+Recommended workflow:
 
 ```text
-1. 先判断问题是否真的需要 sequential-thinking，而不是默认套用。
-2. 如需要，进入 sequential-thinking skill。
-3. 用 start 定义问题边界、目标、模式和步数。
-4. 用 step 逐步推进，每一步只表达当前推进内容。
-5. 当出现新证据时，允许修正，而不是硬撑旧判断。
-6. 到收敛阶段时，必须输出结论、风险与下一步建议。
-7. 完成后按需使用 replay 生成与导出回放文档。
+1. Decide whether the task truly needs sequential-thinking instead of defaulting to it.
+2. If needed, enter the sequential-thinking skill.
+3. Use start to define the problem boundary, goal, mode, and step count.
+4. Use step to advance gradually, expressing only the current step’s reasoning.
+5. When new evidence appears, revise instead of defending the old judgment.
+6. At convergence time, produce the conclusion, risks, and next actions.
+7. When finished, use replay when needed to generate and export a replay document.
 ```
 
 ---
 
-## 示例
+## Examples
 
-### 基础推演
+### Baseline Reasoning
 
 ```bash
-sthink start --name "query-diagnosis" --goal "定位查询性能下降的主因" --mode explore --totalSteps 5
-sthink step --sessionPath "<session-path>" --content "先不要急着选优化手段。需要先把问题拆成几层：是单条 SQL 退化、接口级 N+1，还是更上层的调用放大。若根因没分清，后面的缓存、索引、重写都可能只是补丁。"
-sthink step --sessionPath "<session-path>" --content "从查询日志看，用户详情接口在一次请求里触发了大量重复读取，已经出现明显的 N+1 信号。但还不能直接下结论，因为重复查询也可能只是症状；需要继续确认慢点究竟来自“查询次数过多”，还是“某条关键查询本身很慢”。因此总步数上调一档。"
-sthink step --sessionPath "<session-path>" --content "结论可以收敛了：主因是列表页批量加载时触发的 N+1，次因是关联字段缺少索引放大了单次查询成本。优化顺序应该先消除 N+1，再补索引验证尾延迟；这样既先打掉主矛盾，也避免一上来引入缓存复杂度。"
+sthink start --name "query-diagnosis" --goal "Identify the primary cause of query performance degradation" --mode explore --totalSteps 5
+sthink step --sessionPath "<session-path>" --content "Do not jump straight to optimization tactics. First break the problem into layers: is it a single SQL regression, interface-level N+1 behavior, or amplification from a higher-level call pattern? If the root cause is not separated first, caching, indexing, and rewrites may all become patches instead of real fixes."
+sthink step --sessionPath "<session-path>" --content "The query log shows that the user detail endpoint triggers many repeated reads in a single request, which is a clear N+1 signal. But that still is not enough to conclude the root cause, because repeated queries may only be the symptom. We still need to confirm whether the slowdown comes from too many queries or from one especially expensive query. That means the reasoning should stay open a little longer."
+sthink step --sessionPath "<session-path>" --content "The conclusion can now converge: the primary issue is N+1 triggered during batch loading on the list page, and the secondary issue is missing indexes on related fields amplifying the cost of each query. The right optimization order is to eliminate the N+1 pattern first, then add indexes and validate tail latency. That sequence removes the main contradiction first and avoids introducing cache complexity too early."
 ```
 
-### 修正前提
+### Revising an Earlier Premise
 
 ```bash
-sthink step --sessionPath "<session-path>" --content "回看 profiling 结果后，前面的判断需要修正：真正拖垮接口的不是 N+1 本身，而是关联列缺少索引，导致每次关联查询都在放大全表扫描成本。也就是说，N+1 仍然存在，但它不是第一性瓶颈，优先级应该后移。"
+sthink step --sessionPath "<session-path>" --content "After reviewing the profiling results, the earlier judgment needs correction: the real bottleneck is not N+1 itself, but missing indexes on the join columns, which magnify the cost of every related query into repeated full scans. N+1 still exists, but it is no longer the primary bottleneck, so its priority should move down."
 ```
 
-### 分支比较
+### Branch Comparison
 
 ```bash
-sthink start --name "performance-tradeoff" --goal "比较缓存止血与查询优化的优先级" --mode branch --totalSteps 5
-sthink step --sessionPath "<session-path>" --content "方案 A：先引入缓存削峰。好处是见效快、对接口层侵入小，适合先止血；坏处是会把问题从“数据库慢”转成“缓存一致性与失效策略复杂”，如果根因其实是查询设计不合理，这条路容易把偶然复杂度永久留在系统里。与此同时，方案 B：直接做索引优化和查询重写。好处是从根上消除瓶颈，长期结构更干净；代价是需要更仔细验证写入放大、锁竞争和回归风险。这条路更慢，但如果业务模型稳定，通常比提前上缓存更符合简单优先的原则。"
+sthink start --name "performance-tradeoff" --goal "Compare cache-first mitigation versus query optimization" --mode branch --totalSteps 5
+sthink step --sessionPath "<session-path>" --content "Option A is to introduce caching first. Its advantage is fast relief with relatively low interface-layer intrusion, which is useful when the system needs immediate stabilization. Its downside is that the problem shifts from database slowness to cache consistency and invalidation strategy; if the true root cause is poor query design, this path can permanently preserve accidental complexity. Option B is to optimize indexes and rewrite queries directly. Its advantage is that it removes the bottleneck at the source and keeps the long-term structure cleaner. Its cost is slower execution and the need to validate write amplification, lock contention, and regression risk more carefully. If the business model is stable, this path is usually more aligned with the principle of choosing simplicity over convenience."
 ```
 
 ---
 
 ## sequential-thinking-cli
 
-`sequential-thinking-cli` 是这个 skill 的执行层运行时，通过 npm 分发，对外命令名为 `sthink`。
+`sequential-thinking-cli` is the execution runtime for this skill. It is distributed through npm, and its command entrypoint is `sthink`.
 
-它提供：
+It provides:
 
-- 受控的 step progression
-- 基于 runtime 的收敛信号
-- 自动落盘的 session state
-- completed session 的 replay 生成
-- Markdown 导出能力
+- controlled step progression
+- runtime convergence signals
+- automatic persistence of session state
+- replay generation for completed sessions
+- Markdown export
 
 ---
 
-## CLI 前提条件
+## CLI Prerequisites
 
-| 要求 | 说明 |
-|------|------|
+| Requirement | Check |
+|-------------|-------|
 | Node.js 20+ | `node --version` |
-| npm / pnpm | 用于安装 CLI |
+| npm / pnpm | Used to install the CLI |
 
 ---
 
-## 安装 CLI
+## Install the CLI
 
 ```bash
 npm install -g sequential-thinking-cli
 
-# 或
+# or
 pnpm add -g sequential-thinking-cli
 ```
 
-安装后使用：
+After installation, use:
 
 ```bash
 sthink
@@ -180,7 +184,7 @@ sthink
 
 ## CLI Contract
 
-执行层通过三个主路径动作完成：
+The runtime executes through three main actions:
 
 - `start`
 - `step`
@@ -188,58 +192,59 @@ sthink
 
 ### `start`
 
-只接受四个输入：
+Accepts only four inputs:
 
 - `name`
 - `goal`
 - `mode`
 - `totalSteps`
 
-约束：
+Constraints:
 
-- `mode` 仅允许 `explore`、`branch`、`audit`
-- `totalSteps` 仅允许 `5` 或 `8`
+- `mode` must be one of `explore`, `branch`, or `audit`
+- `totalSteps` must be either `5` or `8`
 
 ### `step`
 
-只接受：
+Accepts only:
 
 - `content`
 
-其余上下文由 runtime 自动恢复并注入。
+All other context should be restored and injected by the runtime.
 
 ### `replay`
 
-用于读取已完成会话并生成 replay 文档；如需要，可额外导出到当前目录。
+Reads a completed session and generates a replay document. If needed, it can also export the result to the current directory.
 
 ---
 
 ## Runtime Model
 
-runtime 提供最小必要的 step policy surface：
+The runtime exposes only the minimum necessary step-policy surface:
 
 - `mode`
 - `totalSteps`
 - `shouldConverge`
 - `mustConclude`
 
-这保证了协议足够窄，同时仍然能为受控收敛提供结构支撑。
+This keeps the protocol narrow while still providing enough structure for controlled convergence.
 
 ---
 
 ## Storage and Export Boundary
 
-- runtime 会自动保存会话状态与步骤记录
-- 完成态可生成 replay 文档
-- `replay` 支持导出到当前目录，便于审阅与复用
+- the runtime automatically persists session state and step records
+- completed sessions can generate replay documents
+- `replay` can export to the current directory for review and reuse
 
 ---
 
-## 仓库结构
+## Repository Structure
 
 ```text
 Sequential-thinking-skills/
 ├── README.md
+├── README.zh-CN.md
 ├── LICENSE
 ├── package.json
 ├── cli/
@@ -252,7 +257,7 @@ Sequential-thinking-skills/
 
 ---
 
-## 开发
+## Development
 
 ```bash
 pnpm install
