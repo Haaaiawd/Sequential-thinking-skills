@@ -17,7 +17,6 @@ export function renderReplayMarkdown(session: SessionState): string {
   for (const step of session.steps) {
     lines.push(`### Step ${step.stepNumber}`);
     lines.push('');
-    lines.push(`- phaseHint: ${step.phaseHint}`);
     lines.push(`- shouldConverge: ${String(step.shouldConverge)}`);
     lines.push(`- mustConclude: ${String(step.mustConclude)}`);
     lines.push('');

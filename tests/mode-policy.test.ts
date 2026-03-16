@@ -24,10 +24,10 @@ describe('getStepPolicy', () => {
     expect(step8.mustConclude).toBe(true);
   });
 
-  it('returns audit-specific guidance', () => {
+  it('returns non-converging policy before the convergence window', () => {
     const policy = getStepPolicy('audit', 2, 5);
-    expect(policy.phaseHint).toContain('被审视对象');
     expect(policy.shouldConverge).toBe(false);
+    expect(policy.mustConclude).toBe(false);
   });
 
   it('throws on invalid step number', () => {

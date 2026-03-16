@@ -60,7 +60,8 @@ describe('CLI run', () => {
       await run(['start', '--name', 'CLI Session', '--goal', 'wire runtime', '--mode', 'explore', '--totalSteps', '5']);
       const output = getStdout();
       expect(output).toContain('session: CLI Session');
-      expect(output).toContain('nextPhaseHint:');
+      expect(output).toContain('shouldConverge: false');
+      expect(output).toContain('mustConclude: false');
       expect(extractStoragePath(output)).toContain(path.join('sthink', 'sessions'));
     } finally {
       restoreRuntimeRoot();

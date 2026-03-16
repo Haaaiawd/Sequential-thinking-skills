@@ -24,7 +24,6 @@ function createCompletedSession(storagePath: string): SessionState {
         stepNumber: 1,
         content: 'step one',
         mode: 'branch',
-        phaseHint: 'hint one',
         shouldConverge: false,
         mustConclude: false,
         savedAt: new Date().toISOString()
@@ -33,7 +32,6 @@ function createCompletedSession(storagePath: string): SessionState {
         stepNumber: 5,
         content: 'final answer',
         mode: 'branch',
-        phaseHint: 'hint final',
         shouldConverge: true,
         mustConclude: true,
         savedAt: new Date().toISOString()

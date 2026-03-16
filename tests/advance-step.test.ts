@@ -26,7 +26,8 @@ describe('advanceStep', () => {
 
     expect(advanced.session.currentStep).toBe(1);
     expect(advanced.session.steps).toHaveLength(1);
-    expect(advanced.step.phaseHint).toContain('被审视对象');
+    expect(advanced.step.shouldConverge).toBe(false);
+    expect(advanced.step.mustConclude).toBe(false);
 
     const savedStep = JSON.parse(
       await readFile(path.join(advanced.session.storagePath, 'steps', '01.json'), 'utf8')

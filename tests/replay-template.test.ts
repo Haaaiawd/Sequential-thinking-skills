@@ -19,7 +19,6 @@ const session: SessionState = {
       stepNumber: 1,
       content: 'step one',
       mode: 'explore',
-      phaseHint: 'hint one',
       shouldConverge: false,
       mustConclude: false,
       savedAt: new Date().toISOString()
@@ -28,7 +27,6 @@ const session: SessionState = {
       stepNumber: 5,
       content: 'final answer',
       mode: 'explore',
-      phaseHint: 'hint final',
       shouldConverge: true,
       mustConclude: true,
       savedAt: new Date().toISOString()

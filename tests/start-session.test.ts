@@ -21,7 +21,8 @@ describe('startSession', () => {
 
     expect(result.session.currentStep).toBe(0);
     expect(result.session.status).toBe('active');
-    expect(result.nextStepPolicy.phaseHint).toContain('澄清问题');
+    expect(result.nextStepPolicy.shouldConverge).toBe(false);
+    expect(result.nextStepPolicy.mustConclude).toBe(false);
 
     const saved = JSON.parse(await readFile(path.join(result.session.storagePath, 'session.json'), 'utf8'));
     expect(saved.name).toBe('Protocol Review');

@@ -18,7 +18,6 @@ export const StepInputSchema = z.object({
 });
 
 export const StepPolicySchema = z.object({
-  phaseHint: z.string().min(1),
   shouldConverge: z.boolean(),
   mustConclude: z.boolean()
 });
@@ -27,7 +26,6 @@ export const StepRecordSchema = z.object({
   stepNumber: z.number().int().positive(),
   content: z.string().min(1),
   mode: SessionModeSchema,
-  phaseHint: z.string().min(1),
   shouldConverge: z.boolean(),
   mustConclude: z.boolean(),
   savedAt: z.string().datetime()

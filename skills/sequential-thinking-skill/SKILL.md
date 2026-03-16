@@ -6,27 +6,36 @@ license: MIT
 
 # Sequential Thinking
 
-这个 skill 的核心不是“多写几段 thought”，而是让 AI 在复杂问题里**以受控节奏推进，并在有限步数内形成结论**。CLI 只是执行载体，skill 本身负责定义何时该进入这种思考方式、为何必须收敛，以及如何避免把顺序思考退化成松散输出。
+这个 skill 的核心不是“多写几段 thought”，而是让 AI 在复杂问题里**持续推进、允许修正，并最终收敛成结论**。CLI 只是执行载体；skill 本身负责定义什么时候该进入这种思考方式，以及如何避免把顺序思考退化成松散输出。
 
 ## Mission
 
-这个 skill 用来把复杂问题处理成一个**有边界的推理过程**：
+这个 skill 用来把复杂问题处理成一个**有边界、可修正、可复核的推理过程**：
 
-- 先明确目标与模式
-- 再按固定步数推进
-- 在后半程强制收敛
+- 先澄清问题，而不是急着给答案
+- 在推进过程中允许修正和调整判断
+- 在复杂度上升时比较替代路径，而不是单线硬推
+- 在有限步数内收敛成结论与建议
 - 最后保留可回放的推理轨迹
 
-它解决的不是“不会想”，而是“想得太散、太随意、太难复核”。
+它解决的不是“不会想”，而是“想得太散、太早下结论、太难复核”。
+
+## Core Capabilities
+
+- **迭代推进**: 把复杂问题拆成连续步骤，而不是试图一口气得到完整答案
+- **动态修正**: 当新证据出现时，允许回看并修正前面的判断
+- **分支比较**: 当存在替代路径时，允许先比较再收敛
+- **上下文保持**: 在多步推理中维持清晰的问题边界与目标
+- **结论收束**: 最终必须形成判断，而不是无限发散
 
 ## When to Use
 
 在以下场景调用：
 
 - 问题需要多个相互关联的推理步骤
-- 初始范围或方法不明确，需要先拆问题再收敛
+- 初始范围或方法不明确，需要先拆问题、再形成方法
 - 需要在有限候选方案之间做比较，而不是无限发散
-- 需要审查已有判断、识别漏洞、证据不足与隐含假设
+- 需要回看已有判断、识别漏洞、证据不足与隐含假设
 - 需要留下可回放、可导出的推理轨迹
 
 **不适用场景**：
@@ -36,41 +45,17 @@ license: MIT
 - 路径已经非常明确、无需多步推演的问题
 - 纯头脑风暴且暂时不要求收敛的场景
 
-## Core Principles
+## Working Philosophy
 
-> [!IMPORTANT]
-> 你**必须**把 sequential-thinking 视为“受控收敛协议”，而不是“格式化输出技巧”。
->
-> **为什么？** 如果只把它当作写作模板，AI 会很快回到自由发散、重复上下文、迟迟不下结论的旧模式。
->
-> **自检示例**：如果你已经在连续补充背景、重复问题定义，却没有形成明确阶段推进与收敛压力，说明你没有真正使用这个 skill。
-
-- **先定边界，再推进**：先定义 `goal`、`mode`、`totalSteps`，再开始思考
-- **每一步只做一步的事**：当前步只表达当前推进，不重复整套系统上下文
-- **后半程必须收敛**：5 步或 8 步都不是建议值，而是节奏边界
-- **最终必须留下结论**：不能把“还可以继续想”当作默认出口
-- **轨迹必须可复核**：需要时可生成 replay，供后续审阅与复用
-
-## Modes
-
-- **`explore`**: 拆问题、识别变量、找主矛盾，后半程必须收敛到结论与建议
-- **`branch`**: 在有限候选路径之间做比较，最终必须推荐一个方向或明确排序
-- **`audit`**: 审查既有判断、识别漏洞、证据不足和隐含假设，最终必须给出修正建议
-
-## Convergence Rhythm
-
-- 当 `totalSteps = 5`
-  - Step 1-3：正常推进
-  - Step 4：开始收敛
-  - Step 5：必须收敛
-- 当 `totalSteps = 8`
-  - Step 1-5：正常推进
-  - Step 6-7：开始收敛
-  - Step 8：必须收敛
+- **先找主问题，再找答案**：不要把现象描述误当作根因定位
+- **允许修正，而不是硬撑前提**：前面想错了，就回头修，不要带着错误前提继续推进
+- **先消除复杂度，再堆解决方案**：优先识别主矛盾，而不是抢着给补丁
+- **每一步只推进一步**：当前步只表达当前判断，不重复整套背景
+- **最终必须落到结论**：不能把“我还能继续想”当作默认出口
 
 ## Installation & Runtime Model
 
-这个 skill 面向 agent 交付思想与调用约束；CLI 通过 npm 分发。
+这个 skill 面向 agent 交付思考方式与调用约束；CLI 通过 npm 分发。
 
 在使用前，应先确保本地已安装对应 CLI：
 
@@ -82,7 +67,7 @@ pnpm add -g sequential-thinking-cli
 
 ## CLI Contract
 
-本 skill 不再要求 AI 手写 thought JSON。执行层应通过 CLI 主路径动作完成：
+本 skill 不再要求 AI 手写 thought JSON。执行层通过 CLI 主路径动作完成：
 
 - `start`
 - `step`
@@ -102,6 +87,8 @@ pnpm add -g sequential-thinking-cli
 - `mode` 仅允许 `explore`、`branch`、`audit`
 - `totalSteps` 仅允许 `5` 或 `8`
 
+如果你不确定该选哪种模式，默认用 `explore`。只有在任务明显是在比较候选路径时才用 `branch`；只有在任务明显是在审查既有判断时才用 `audit`。
+
 ### `step`
 
 只接受：
@@ -119,30 +106,49 @@ pnpm add -g sequential-thinking-cli
 ```text
 1. 先判断问题是否真的需要 sequential-thinking，而不是默认套用。
 2. 如需要，先安装或确认本地已有 npm CLI。
-3. 用 `sthink start` 显式给出 `name`、`goal`、`mode`、`totalSteps`。
+3. 用 `sthink start` 给出 `name`、`goal`、`mode`、`totalSteps`。
 4. 用 `sthink step` 逐步推进，每一步只写当前推进内容。
-5. 到收敛阶段时，必须输出结论、风险与下一步建议。
-6. 完成后按需使用 `sthink replay` 生成与导出回放文档。
+5. 当出现新证据时，允许修正，而不是硬撑旧判断。
+6. 到收敛阶段时，必须输出结论、风险与下一步建议。
+7. 完成后按需使用 `sthink replay` 生成与导出回放文档。
 ```
 
-## Example Flow
+## Examples
+
+以下示例不是为了让你回去手写 JSON，而是为了说明这种 skill 真正有价值的地方：**如何推进、如何修正、如何收敛**。
+
+### Example 1: 基础推演
 
 ```bash
-sthink start --name "protocol-review" --goal "澄清 runtime 协议边界" --mode explore --totalSteps 5
-sthink step --sessionPath "<session-path>" --content "先拆解协议边界、输入约束和默认行为。"
-sthink step --sessionPath "<session-path>" --content "继续识别最容易漂移的能力边界。"
-sthink step --sessionPath "<session-path>" --content "整理核心能力与非目标。"
-sthink step --sessionPath "<session-path>" --content "开始收敛到 v1 必做与延后项。"
-sthink step --sessionPath "<session-path>" --content "输出最终结论、风险和下一步建议。"
-sthink replay --sessionPath "<session-path>"
+sthink start --name "query-diagnosis" --goal "定位查询性能下降的主因" --mode explore --totalSteps 5
+sthink step --sessionPath "<session-path>" --content "先不要急着选优化手段。需要先把问题拆成几层：是单条 SQL 退化、接口级 N+1，还是更上层的调用放大。若根因没分清，后面的缓存、索引、重写都可能只是补丁。"
+sthink step --sessionPath "<session-path>" --content "从查询日志看，用户详情接口在一次请求里触发了大量重复读取，已经出现明显的 N+1 信号。但还不能直接下结论，因为重复查询也可能只是症状；需要继续确认慢点究竟来自“查询次数过多”，还是“某条关键查询本身很慢”。因此总步数上调一档。"
+sthink step --sessionPath "<session-path>" --content "结论可以收敛了：主因是列表页批量加载时触发的 N+1，次因是关联字段缺少索引放大了单次查询成本。优化顺序应该先消除 N+1，再补索引验证尾延迟；这样既先打掉主矛盾，也避免一上来引入缓存复杂度。"
+```
+
+### Example 2: 修正前提
+
+```bash
+sthink step --sessionPath "<session-path>" --content "回看 profiling 结果后，前面的判断需要修正：真正拖垮接口的不是 N+1 本身，而是关联列缺少索引，导致每次关联查询都在放大全表扫描成本。也就是说，N+1 仍然存在，但它不是第一性瓶颈，优先级应该后移。"
+```
+
+### Example 3: 复杂变更拆解
+
+```bash
+sthink start --name "change-impact-analysis" --goal "拆解复杂变更的影响与优先级" --mode explore --totalSteps 5
+sthink step --sessionPath "<session-path>" --content "用户一次性提出了多项规则修改，不该把它们当成同一种改动处理。先拆开看：有的是机制原则调整，有的是数值平衡，有的是接口语义变化，还有的是文档与实现脱节。如果不先分型，后面会把“该改 ADR 的”“该改设计文档的”“该补代码契约的”混成一锅。"
+sthink step --sessionPath "<session-path>" --content "先做影响矩阵。机制原则类改动通常会回流到 ADR 和 System Design；数值平衡会影响规则表、配置与测试基线；接口语义变化最危险，因为它会悄悄破坏调用方的假设。这里最该警惕的不是改动数量，而是有没有改到“被多个模块默认依赖、但文档里没写清楚”的隐性契约。"
+sthink step --sessionPath "<session-path>" --content "可以收敛了：先处理那些会改变系统边界或调用语义的项，再处理数值与体验层面的项。顺序上应优先修正文档与契约，再讨论平衡性；否则后续所有实现和评审都会建立在漂移的前提上。结论不是“先改最显眼的”，而是“先修最容易污染系统认知的”。"
+```
+
+### Example 4: 分支比较
+
+```bash
+sthink start --name "performance-tradeoff" --goal "比较缓存止血与查询优化的优先级" --mode branch --totalSteps 5
+sthink step --sessionPath "<session-path>" --content "方案 A：先引入缓存削峰。好处是见效快、对接口层侵入小，适合先止血；坏处是会把问题从“数据库慢”转成“缓存一致性与失效策略复杂”，如果根因其实是查询设计不合理，这条路容易把偶然复杂度永久留在系统里。与此同时，方案 B：直接做索引优化和查询重写。好处是从根上消除瓶颈，长期结构更干净；代价是需要更仔细验证写入放大、锁竞争和回归风险。这条路更慢，但如果业务模型稳定，通常比提前上缓存更符合简单优先的原则。"
 ```
 
 ## Storage & Export Boundary
-
-> [!IMPORTANT]
-> 这个 skill 关注的是思考协议与调用方式，不应把某个仓库内的临时目录结构误写成产品承诺。
->
-> **为什么？** 运行时默认状态目录属于 CLI 实现边界，后续可能迁移到更合适的用户级目录；skill 文档不应在这一层提前锁死。
 
 - runtime 会自动保存会话状态与步骤记录
 - 完成态可生成 replay 文档
@@ -150,7 +156,7 @@ sthink replay --sessionPath "<session-path>"
 
 ## Heuristic Reminders
 
-以下提醒仍然有效，但现在由 `mode` 与 runtime 节奏承载，而不是靠手写 JSON 自我约束。
+以下提醒是启发式问题，不是硬约束。真正重要的是：它们能帮助你减少空转，逼近结论。
 
 - **问题定义提醒**: 你现在是在描述现象，还是在定位根因？
 - **证据提醒**: 当前判断基于事实、观察结果，还是基于猜测与假设？
@@ -160,10 +166,11 @@ sthink replay --sessionPath "<session-path>"
 
 ## Tips
 
-- 不要再手写 thought JSON；让 CLI runtime 负责节奏、落盘与收敛约束
+- 不要再手写 thought JSON；让 CLI runtime 负责节奏、落盘与 replay
 - 不要把 sequential-thinking 当成默认模式，只在真正需要多步收敛时调用
-- `start` 时就选对 `mode` 与 `totalSteps`，避免运行中漂移任务性质
+- 如果不确定模式，先用 `explore`
 - `step` 的 `content` 只表达当前推进内容，不要重复补全系统上下文
+- 如果发现前提错了，就明确修正，不要硬撑
 - 到收敛阶段时，应明确输出结论、风险和下一步动作
 - 只有已完成会话才能执行 `replay`
 

@@ -19,7 +19,6 @@ export interface StepInput {
 }
 
 export interface StepPolicy {
-  phaseHint: string;
   shouldConverge: boolean;
   mustConclude: boolean;
 }
@@ -28,7 +27,6 @@ export interface StepRecord {
   stepNumber: number;
   content: string;
   mode: SessionMode;
-  phaseHint: string;
   shouldConverge: boolean;
   mustConclude: boolean;
   savedAt: string;

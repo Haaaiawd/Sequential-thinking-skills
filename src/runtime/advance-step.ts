@@ -24,7 +24,6 @@ export async function advanceStep(session: SessionState, input: StepInput): Prom
     stepNumber,
     content: parsed.content,
     mode: session.mode,
-    phaseHint: policy.phaseHint,
     shouldConverge: policy.shouldConverge,
     mustConclude: policy.mustConclude,
     savedAt

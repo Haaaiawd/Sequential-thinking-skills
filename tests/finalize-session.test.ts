@@ -20,7 +20,6 @@ function createSession(overrides: Partial<SessionState> = {}): SessionState {
         stepNumber: 1,
         content: 'first',
         mode: 'explore',
-        phaseHint: 'hint',
         shouldConverge: false,
         mustConclude: false,
         savedAt: new Date().toISOString()
@@ -29,7 +28,6 @@ function createSession(overrides: Partial<SessionState> = {}): SessionState {
         stepNumber: 5,
         content: 'final conclusion',
         mode: 'explore',
-        phaseHint: 'final hint',
         shouldConverge: true,
         mustConclude: true,
         savedAt: new Date().toISOString()
