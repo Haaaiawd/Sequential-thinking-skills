@@ -11,9 +11,46 @@ import { readSessionState } from '../src/storage/read-session.js';
 import { exportReplayToDirectory, loadCompletedSession, writeReplayMarkdown } from '../src/storage/replay-store.js';
 import { resolveSessionPath } from '../src/storage/runtime-path.js';
 
+function getHelpText(): string {
+  return `Sequential Thinking CLI
+
+Usage:
+  sthink <command> [options]
+
+Commands:
+  start     Start a new reasoning session
+  step      Advance current session by one step
+  replay    Replay completed session
+  help      Show help information
+
+start options:
+  --name <string>        Session name
+  --goal <string>        Reasoning goal
+  --mode <string>        Reasoning mode (explore|branch|audit)
+  --totalSteps <number>  Total steps (5|8)
+
+step options:
+  --sessionPath <string> Session path
+  --content <string>     Current step content
+
+replay options:
+  --sessionPath <string> Session path
+  --exportDir <string>   Export directory (optional)`;
+}
+
 export async function run(argv: string[] = process.argv.slice(2)): Promise<void> {
   const parsed = parseArgs(argv);
   const currentWorkingDirectory = process.cwd();
+
+  if (parsed.command === 'help' || parsed.command === '--help' || parsed.command === '-h') {
+    process.stdout.write(`${getHelpText()}\n`);
+    return;
+  }
+
+  if (!parsed.command) {
+    process.stdout.write(`${getHelpText()}\n`);
+    return;
+  }
 
   if (parsed.command === 'start') {
     const name = parsed.options.name;
